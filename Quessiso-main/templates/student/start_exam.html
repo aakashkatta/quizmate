@@ -1,0 +1,244 @@
+<!-- templates/student/start_exam.html -->
+{% extends 'student/student_minimal.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+    <div id="startExamContainer">
+        <h2>Course: {{ course.course_name }}</h2>
+        <h3>Exam: {{ course.course_name }}</h3>
+        <div class="alert alert-warning">
+            <strong>Instructions:</strong>
+            <ul>
+                <li>Ensure you are in a quiet environment.</li>
+                <li>Once the exam starts, you will be in full-screen mode.</li>
+                <li>Do not switch tabs or windows during the exam.</li>
+                <li>Your exam will be auto-submitted if you attempt to switch tabs, windows, or exit full-screen mode.</li>
+            </ul>
+        </div>
+        <button id="startExamBtn" class="btn btn-primary btn-lg">Start Exam</button>
+    </div>
+    {% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+    <div id="examContent" class="jumbotron my-4" data-duration="{{ duration }}" style="display: none;">
+        <div id="timer">Time Remaining: <span id="time">00:00</span></div>
+
+        <form class="form" autocomplete="off" onsubmit="return saveAns()" action="{% url 'calculate-marks' %}" method="POST" id="examForm">
+            {% csrf_token %}
+            <input type="hidden" name="exam_id" value="{{ course.id }}">
+            {% for q in questions %}
+                <h3 class="text-danger">{{ forloop.counter }}. {{ q.question }}</h3>
+                <h4 style="text-align: right;">[{{ q.marks }} Marks]</h4>
+                
+                <div class="form-check mx-4">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" id="option1_{{ q.id }}" value="Option1">
+                    <label class="form-check-label" for="option1_{{ q.id }}">
+                        {{ q.option1 }}
+                    </label>
+                </div>
+
+                <div class="form-check mx-4">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" id="option2_{{ q.id }}" value="Option2">
+                    <label class="form-check-label" for="option2_{{ q.id }}">
+                        {{ q.option2 }}
+                    </label>
+                </div>
+
+                <div class="form-check mx-4">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" id="option3_{{ q.id }}" value="Option3">
+                    <label class="form-check-label" for="option3_{{ q.id }}">
+                        {{ q.option3 }}
+                    </label>
+                </div>
+
+                <div class="form-check mx-4">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" id="option4_{{ q.id }}" value="Option4">
+                    <label class="form-check-label" for="option4_{{ q.id }}">
+                        {{ q.option4 }}
+                    </label>
+                </div>
+                <hr>
+            {% endfor %}
+            <input class="btn btn-success btn-lg" style="border-radius: 0%;" type="submit" value="Submit Answers">
+        </form>
+    </div>
+</div>
+
+<script>
+    // Duration in minutes passed from the server
+    var durationElement = document.querySelector('.jumbotron');
+    var duration = parseInt(durationElement.getAttribute('data-duration'), 10) || 60; // e.g., 60 for 60 minutes
+    var totalTime = duration * 60; // Convert to seconds
+    console.log('Exam duration set to:', duration, 'minutes');
+
+    // Initialize the timer
+    var timer = totalTime, minutes, seconds;
+    var display = document.getElementById('time');
+
+    var examSubmitted = false;
+    function submitExam() {
+        if (!examSubmitted) {
+            examSubmitted = true;
+            console.log('Submitting the exam...');
+            document.getElementById('examForm').submit();
+    
+            // Remove event listeners to prevent further actions
+            document.removeEventListener('fullscreenchange', exitHandler);
+            document.removeEventListener('mozfullscreenchange', exitHandler);
+            document.removeEventListener('webkitfullscreenchange', exitHandler);
+            document.removeEventListener('msfullscreenchange', exitHandler);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('blur', handleBlur);
+        }
+    }
+    function startTimer() {
+        console.log('Timer started with duration:', duration, 'minutes');
+        var countdown = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(countdown);
+                alert("Time is up! Your answers will be submitted automatically.");
+                submitExam();
+                disableEventListeners();
+            }
+        }, 1000);
+    }
+
+    // Function to request full-screen mode
+    function requestFullScreen() {
+        var el = document.documentElement;
+        var requestMethod = el.requestFullscreen || el.mozRequestFullScreen || el.webkitRequestFullScreen || el.msRequestFullscreen;
+
+        if (requestMethod) {
+            requestMethod.call(el);
+            console.log('Full-screen mode requested.');
+        } else {
+            alert("Full-screen mode is not supported by your browser.");
+            console.log('Full-screen mode not supported.');
+        }
+    }
+
+    // Function to handle full-screen change
+    function exitHandler() {
+        if (!document.fullscreenElement && !document.mozFullScreen && !document.webkitIsFullScreen && !document.msFullscreenElement) {
+            alert("You exited full-screen mode! The exam will be submitted.");
+            submitExam();
+            disableEventListeners();
+        }
+    }
+
+    // Detect Tab Switching
+    function handleVisibilityChange() {
+        if (document.hidden) {
+            alert("You switched tabs! The exam will be submitted.");
+            submitExam();
+            disableEventListeners();
+        }
+    }
+
+    // Detect Window Focus Loss
+    function handleBlur() {
+        alert("You switched windows! The exam will be submitted.");
+        submitExam();
+        disableEventListeners();
+    }
+    function disableEventListeners() {
+        // Temporarily remove event listeners
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('blur', handleBlur);
+    
+        // Re-enable them after a short delay (e.g., 2 seconds)
+        setTimeout(function() {
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            window.addEventListener('blur', handleBlur);
+        }, 2000);  // 2 seconds delay
+    }
+
+    // Function to save answers to cookies (optional, as answers are submitted)
+    function saveAns() {
+        console.log('saveAns() called');
+        var ele = document.getElementsByTagName('input');
+        for(var i = 0; i < ele.length; i++) { 
+            if(ele[i].type === "radio") { 
+                if(ele[i].checked){        
+                    setCookie(ele[i].name, ele[i].value, 1/1440); // Cookie expires in 1 minute
+                }
+            } 
+        }
+        return true; // Allow form submission
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        console.log('Cookie set:', cname, '=', cvalue);
+    }
+
+    // Handle Start Exam Button Click
+    document.getElementById('startExamBtn').addEventListener('click', function () {
+        console.log('Start Exam button clicked.');
+        requestFullScreen();  // Enter full-screen mode
+        startTimer();  // Start the timer
+        document.getElementById('startExamContainer').style.display = 'none';  // Hide the start button container
+        document.getElementById('examContent').style.display = 'block';  // Show exam content
+    });
+
+    // Listen for full-screen changes
+    document.addEventListener('fullscreenchange', exitHandler);
+    document.addEventListener('mozfullscreenchange', exitHandler);
+    document.addEventListener('webkitfullscreenchange', exitHandler);
+    document.addEventListener('msfullscreenchange', exitHandler);
+
+    // Listen for tab switching
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Listen for window focus loss
+    window.addEventListener('blur', handleBlur);
+
+    // Disable right-click context menu (optional)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+
+    // Disable specific keyboard shortcuts (optional)
+    document.addEventListener('keydown', function(e) {
+        // List of key combinations to disable
+        if (
+            (e.ctrlKey && e.shiftKey && e.key === 'I') || // Ctrl+Shift+I
+            (e.ctrlKey && e.shiftKey && e.key === 'J') || // Ctrl+Shift+J
+            (e.ctrlKey && e.key === 'U') ||               // Ctrl+U
+            (e.altKey && e.key === 'F4') ||               // Alt+F4
+            (e.ctrlKey && e.key === 'S')                  // Ctrl+S
+        ) {
+            e.preventDefault();
+            console.log('Keyboard shortcut prevented:', e.key);
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+      $('.alert .close').on('click', function() {
+        $(this).parent('.alert').fadeOut();
+      });
+    });
+  </script>
+
+{% endblock content %}

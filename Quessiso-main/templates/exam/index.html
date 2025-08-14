@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quessio: Your Gateway to Online Quizzes</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'exam/css/bootstrap.min.css' %}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Custom CSS */
+    .jumbotron {
+      margin-bottom: 0;
+      position: relative;
+      background: url("https://www.agarum.com//photos/1/4/90/1286/c/l/ffa334368b363186d610a528cb90d403.jpg") no-repeat center center;
+      background-size: cover;
+      height: 100vh; /* Full viewport height */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Overlay for transparency */
+    .jumbotron::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+      z-index: 1;
+    }
+
+    /* Ensure content is above the overlay */
+    .jumbotron .container {
+      position: relative;
+      z-index: 2;
+    }
+    .jumbotron {
+      margin: -25px;
+      overflow-x: hidden;
+       /* Adjust this value to match the gap */
+    }
+    html, body {
+      overflow-x: hidden;
+      
+    }
+        
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    
+    
+
+    /* Button Styles */
+    .btn-info {
+      background-color: rgba(24, 177, 233, 0.8);
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-info:hover {
+      background-color: rgba(23, 162, 184, 1);
+    }
+
+    /* Responsive Text */
+    /* Reduce <h2> font size */
+.jumbotron h2.display-3 {
+  font-size: 3.5rem; 
+}
+
+/* Reduce <p> font sizes */
+.jumbotron p.display-4 {
+  font-size: 2.0rem; /* Adjust as needed */
+}
+
+.jumbotron p.lead {
+  font-size: 1.5rem; /* Adjust as needed */
+}
+
+.jumbotron {
+  padding-top: 70px; /* 56px navbar height + 14px extra spacing */
+}
+.custom-h2 {
+  color: #FAEBD7; /* Example: Gold color */
+}
+
+
+
+  </style>
+</head>
+
+<body>
+  {% include "exam/navbar.html" %}
+  <br>
+  <section id="section-jumbotron" class="jumbotron jumbotron-fluid d-flex justify-content-center align-items-center">
+    <div class="container text-center">
+      <h2 class="display-3 custom-h2">Quessio: Quiz and Assignment Portal</h2>
+      <p class="display-4 d-none d-sm-block custom-h2">Experience Seamless Assessments with Quessio!</p>
+      <p class="lead custom-h2">Sign up now to start your first Online Quiz and Assignment</p>
+
+      <p style=color:#FAEBD7;><strong> Start Your Journey Here:</strong></p>
+      <a href="/student/studentsignup" class="btn btn-lg btn-info" style="padding-right: 35px; border-radius: 0%;">
+        <i class="fa fa-graduation-cap" aria-hidden="true"></i> Sign Up as Student
+      </a>
+
+      <br><br><br>
+    </div>
+  </section>
+  {% include "exam/footer.html" %}
+
+  <!-- Bootstrap JS -->
+  <script src="{% static 'exam/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

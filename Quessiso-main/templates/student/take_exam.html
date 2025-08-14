@@ -1,0 +1,59 @@
+{% extends 'student/studentbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+</head>
+
+<br><br>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="container my-4">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="card border-info mx-4 my-4">
+        <div class="card-body text-default">
+          <h4 class="card-title">Exam Details :</h4>
+          <ul style="list-style:decimal;">
+            <li>Course : {{ course.course_name }}</li>
+            <li>Total Question : {{ total_questions }}</li>
+            <li>Total Marks : {{ total_marks }}</li>
+            <li>Duration : {{ duration }} minutes</li>
+          </ul>
+
+          <h4 class="card-title">Rules :</h4>
+          <ul style="list-style:decimal;">
+            <li>All questions are MCQ (multiple choice question)</li>
+            <li>You will be able to write the exam only once; if already submitted, your score will be displayed</li>
+          </ul>
+
+          <a href="{% url 'start-exam' course.id %}" class="btn btn-success" style="border-radius:0px;">Enter Examination</a>
+        </div>
+        <div class="card-footer">Best Of Luck, Students!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('.alert .close').on('click', function() {
+      $(this).parent('.alert').fadeOut();
+    });
+  });
+</script>
+
+<br><br><br><br><br><br>
+{% endblock content %}

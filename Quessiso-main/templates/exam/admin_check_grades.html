@@ -1,0 +1,79 @@
+{% extends 'exam/adminbase.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+<br><br>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">View Grades</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Assignment</th>
+          <th>Course</th>
+          <th>File</th>
+          <th>Submitted At</th>
+          <th>Grade</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+        <tr>
+          <td>{{ r.assignment.title }}</td>
+          <td>{{r.assignment.course}}</td>
+          <td>
+            {% if r.file %}
+              <a href="{{ r.file.url }}" download>Download File</a>
+            {% else %}
+              No file submitted
+            {% endif %}
+          </td>
+          <td>{{ r.submitted_at|date:"M d, Y H:i" }}</td>
+        <td>
+          {% if r.grade %}
+              {{ r.grade }}
+          {% else %}
+              Pending
+          {% endif %}
+        </td>
+        <td>
+          {% if r.feedback %}
+              {{ r.feedback }}
+          {% else %}
+              N/A
+          {% endif %}
+        </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3">No results found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+
+<br><br><br><br><br><br>
+{% endblock content %}

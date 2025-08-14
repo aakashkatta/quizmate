@@ -1,0 +1,148 @@
+{% extends 'student/studentbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+    <!-- Bootstrap CSS -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- Bootstrap JS -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <style>
+        a:link {
+            text-decoration: none;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .guidelines-section {
+            text-align: left;
+            margin: 10px 0 50px; /* Reduced top margin to lessen gap */
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f1f8ff;
+        }
+
+        .guidelines-section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #04868f;
+            font-weight: bold;
+        }
+
+        .guideline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+
+        .guideline-item i {
+            color: #04868f;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .submission-form {
+            margin: 50px auto;
+            max-width: 600px;
+        }
+
+        .btn-submit {
+            background-color: #04868f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-weight: bold;
+        }
+
+        .btn-submit:hover {
+            background-color: #036c7c;
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .btn-cancel:hover {
+            background-color: #5a6268;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<h2>Submit Assignment</h2>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="container submission-form">
+    <div class="guidelines-section">
+        <h3>Guidelines</h3>
+        <div class="guideline-item">
+            <i class="glyphicon glyphicon-time"></i>
+            <span><strong>Deadline Compliance:</strong> Submit assignments before the due date. Late submissions are not accepted.</span>
+        </div>
+        <div class="guideline-item">
+            <i class="glyphicon glyphicon-file"></i>
+            <span><strong>File Format & Word Count:</strong> Follow the required file format and minimum word count for submission.</span>
+        </div>
+        <div class="guideline-item">
+            <i class="glyphicon glyphicon-check"></i> <!-- Icon added for Grading Criteria -->
+            <span><strong>Grading Criteria:</strong> Points are awarded based on format, word count, keyword relevance, and overall quality.</span>
+        </div>
+        <div class="guideline-item">
+            <i class="glyphicon glyphicon-ok-circle"></i>
+            <span><strong>Academic Integrity:</strong> Submit original work; plagiarism will result in a score of zero.</span>
+        </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="assignment">Assignment</label>
+            <input type="text" class="form-control" id="assignment" value="{{ assignment.title }}" disabled>
+        </div>
+        <div class="form-group">
+            <label for="file">Upload Your Submission</label>
+            {% render_field form.file class="form-control" %}
+            <p class="help-block">Accepted formats: .pdf, .docx | Max size: 10MB</p>
+        </div>
+        <button type="submit" class="btn-submit">Submit</button>
+        <a href="{% url 'student-assignment-view' %}" class="btn-cancel">Cancel</a>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+      $('.alert .close').on('click', function() {
+        $(this).parent('.alert').fadeOut();
+      });
+    });
+  </script>
+
+<br><br><br><br><br><br>
+
+{% endblock content %}

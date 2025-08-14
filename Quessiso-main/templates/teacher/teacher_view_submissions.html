@@ -1,0 +1,85 @@
+<!-- assignments/templates/assignments/teacher/teacher_view_submissions.html -->
+{% extends 'teacher/teacherbase.html' %}
+{% load static %}
+
+{% block title %}View Submissions{% endblock title %}
+
+{% block content %}
+<head>
+  <!-- Bootstrap CSS -->
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <!-- Bootstrap JS -->
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <!-- jQuery -->
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+    
+    /* Additional Styling for the Table */
+    #submission-table {
+      width: 100%;
+    }
+  </style>
+</head>
+<br><br>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Student Submissions</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="submission-table">
+      <thead>
+        <tr>
+          <th>Assignment</th>
+          <th>Student</th>
+          <th>File</th>
+          <th>Submitted At</th>
+          <th>Grade</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for submission in submissions %}
+        <tr>
+          <td>{{ submission.assignment.title }}</td>
+          <td>{{ submission.student.username }}</td>
+          <td><a href="{{ submission.file.url }}" target="_blank">Download</a></td>
+          <td>{{ submission.submitted_at|date:"M d, Y H:i" }}</td>
+          <td>
+            {% if submission.grade %}
+              {{ submission.grade }}
+            {% else %}
+              Pending
+            {% endif %}
+          </td>
+          <td>
+            {% if submission.feedback %}
+              {{ submission.feedback }}
+            {% else %}
+              N/A
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center">No submissions found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+{% endblock content %}

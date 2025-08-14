@@ -1,0 +1,107 @@
+<!-- assignments/templates/assignments/student/student_assignment.html -->
+{% extends 'student/studentbase.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+<head>
+    <!-- Bootstrap CSS -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <!-- Bootstrap JS -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <!-- jQuery -->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <style media="screen">
+        a:link {
+            text-decoration: none;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .assignment-card {
+            margin: 20px 0;
+        }
+
+        .assignment-card .card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: box-shadow 0.3s;
+        }
+
+        .assignment-card .card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .btn-submit {
+            background-color: #04868f;
+            color: #fff;
+            border: none;
+            border-radius: 0;
+            padding: 10px 20px;
+        }
+
+        .btn-submit:hover {
+            background-color: #036c7c;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<h2>Available Assignments</h2>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+<div class="container">
+    {% if assignments %}
+        {% for assignment in assignments %}
+            <div class="assignment-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">{{ assignment.title }}</h3>
+                        <p><strong>Course:</strong> {{ assignment.course }}</p>
+                        <p><strong>Grade:</strong> {{ assignment.marks }}</p>
+                        <p class="card-text">{{ assignment.description }}</p>
+                        <p><strong>Due Date:</strong> {{ assignment.due_date|date:"M d, Y H:i" }}</p>
+                        <p><strong>Required Keywords:</strong> {{ assignment.required_keywords }}</p>
+                        <a href="{% url 'upload-submission' assignment.id %}" class="btn-submit">Submit Assignment</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center">No assignments available at the moment.</p>
+    {% endif %}
+</div>
+<script>
+    $(document).ready(function() {
+      $('.alert .close').on('click', function() {
+        $(this).parent('.alert').fadeOut();
+      });
+    });
+  </script>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+{% endblock content %}

@@ -1,0 +1,69 @@
+<!-- assignments/templates/assignments/teacher/teacher_view_assignment.html -->
+{% extends 'teacher/teacherbase.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+<br><br>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Assignments</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Due Date</th>
+          <th>Course</th>
+          <th>Grade</th>
+          <th>Required Keywords</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for assignment in assignments %}
+        <tr>
+          <td>{{ assignment.title }}</td>
+          <td>{{ assignment.description }}</td>
+          <td>{{assignment.course}}</td>
+          <td>{{assignment.marks}}</td>
+          <td>{{ assignment.due_date|date:"M d, Y H:i" }}</td>
+          <td>{{ assignment.required_keywords }}</td>
+          <td>
+            <a class="btn btn-danger btn-xs" style="border-radius: 0%;" href="{% url 'teacher:teacher-delete-assignment' assignment.id %}">
+              <span class="glyphicon glyphicon-trash"></span>
+            </a>
+          </td>
+        </tr>
+         {% empty %}
+        <tr>
+            <td colspan="5">No assignments available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+{% endblock content %}

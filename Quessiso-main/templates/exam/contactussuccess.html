@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <style >
+    * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .navbar {
+            overflow: hidden;
+        }
+
+        .navbar-brand {
+            font-size: 20px;
+            font-family: sans-serif;
+        }
+
+        .jumbotron {
+            margin: 0; /* Adjust as needed */
+            padding: 2rem; /* Add padding to the jumbotron */
+        }
+
+        .jumbotron h1 {
+            text-align: center;
+        }
+
+  </style>
+
+</head>
+
+<body>
+
+  {% include "exam/navbar.html" %}
+  
+  <div class="jumbotron">
+    <h1 class="display-4">Your message sent successfully !</h1>
+    <p class="lead">We will respond to your feedback soon</p>
+    <hr class="my-4">
+    <p>Check other features of website !</p>
+    <p class="lead">
+      <a class="btn btn-primary btn-lg" href="/" role="button">HOME</a>
+    </p>
+  </div>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+  {% include "exam/footer.html" %}
+</body>
+
+</html>

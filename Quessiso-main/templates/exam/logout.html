@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Logged Out</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      
+      padding-top: 80px;
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .hello{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h2 {
+      color: #343a40;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  {% include "exam/navbar.html" %}
+  
+  <div class="hello container text-center">
+    <h2>Logged Out Successfully.<br>Thank you for using our system!</h2>
+  </div>
+
+  <br><br><br>
+  {% include "exam/footer.html" %}
+  
+</body>
+</html>

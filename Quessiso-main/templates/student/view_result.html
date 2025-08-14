@@ -1,0 +1,85 @@
+<!-- templates/student/view_result.html -->
+{% extends 'student/studentbase.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+<br><br>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Your Exam Results</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Exam Name</th>
+          <th>Marks Obtained</th>
+          <th>Total Marks</th>
+          <th>Submission Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if attempts %}
+          {% for attempt in attempts %}
+            <tr>
+              <!-- Display the name of the exam/course -->
+              <td>{{ attempt.exam.course_name }}</td>
+              
+              <!-- Display marks obtained by the student -->
+              <td>{{ attempt.marks_obtained }}</td>
+              
+              <!-- Display total marks for the exam -->
+              <td>{{ attempt.exam.total_marks }}</td>
+              
+              <!-- Display the time when the exam was submitted -->
+              <td>{{ attempt.submission_time|date:"F j, Y, g:i a" }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="4" class="text-center">You have not attempted any exams yet.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('.alert .close').on('click', function() {
+      $(this).parent('.alert').fadeOut();
+    });
+  });
+</script>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+{% endblock content %}
